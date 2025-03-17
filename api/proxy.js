@@ -1,7 +1,6 @@
 export default async function handler(req, res) {
-  // Get environment variables from Vercel project settings
-  const SUPABASE_URL = process.env.SUPABASE_URL; // Example: https://dyrzualjtyxkvcxyrorr.supabase.co
-  const SUPABASE_API_KEY = process.env.SUPABASE_ANON_KEY; // Example: eyJh...anon key
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_API_KEY = process.env.SUPABASE_ANON_KEY; // Using anon key as per your instructions.
 
   if (!SUPABASE_URL || !SUPABASE_API_KEY) {
     return res.status(500).json({
@@ -9,10 +8,9 @@ export default async function handler(req, res) {
     });
   }
 
-  // Construct the full Supabase REST endpoint
+  // Build the full URL for Supabase REST API
   const targetUrl = `${SUPABASE_URL}/rest/v1${req.url}`;
 
-  // Set up request options
   const options = {
     method: req.method,
     headers: {
@@ -22,7 +20,7 @@ export default async function handler(req, res) {
     },
   };
 
-  // Attach the body for methods that send data (POST, PATCH, DELETE)
+  // Include the request body for POST, PATCH, DELETE
   if (req.method !== "GET" && req.body) {
     options.body = JSON.stringify(req.body);
   }
@@ -33,10 +31,7 @@ export default async function handler(req, res) {
 
     res.status(response.status).json(data);
   } catch (error) {
-    console.error("Proxy Error:", error);
-    res.status(500).json({
-      error: "Proxy error",
-      details: error.message,
-    });
+    console.error("Proxy error:", error);
+    res.status(500).json({ error: "Proxy error", details: error.message });
   }
 }
