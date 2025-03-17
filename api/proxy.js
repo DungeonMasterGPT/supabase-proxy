@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   // Get environment variables from Vercel project settings
   const SUPABASE_URL = process.env.SUPABASE_URL; // Example: https://dyrzualjtyxkvcxyrorr.supabase.co
-  const SUPABASE_API_KEY = process.env.SUPABASE_ANON_KEY; // Example: eyJh...anon key
+  const SUPABASE_API_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cnp1YWxqdHl4a3ZjeHlyb3JyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNzkyNjEsImV4cCI6MjA1NzY1NTI2MX0.tNT0GvyGuBCozrUChFzZetzuwNn21e443EWjcLs51-w
 
   if (!SUPABASE_URL || !SUPABASE_API_KEY) {
     return res.status(500).json({
