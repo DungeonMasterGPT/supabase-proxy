@@ -1,19 +1,26 @@
 export default async function handler(req, res) {
-  const SUPABASE_API_URL = "https://dyrzualjtyxkvcxyrorr.supabase.co/rest/v1";
-  const SUPABASE_API_KEY = "YOUR_SUPABASE_API_KEY"; // replace with your key!
+  const SUPABASE_URL = process.env.SUPABASE_URL; // from Vercel environment
+  const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY; // from Vercel environment
 
-  const targetUrl = `${SUPABASE_API_URL}${req.url}`;
+  // Validate environment variables
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    return res.status(500).json({
+      error: 'Missing SUPABASE_URL or SUPABASE_ANON_KEY in environment variables.',
+    });
+  }
+
+  const targetUrl = `${SUPABASE_URL}/rest/v1${req.url}`;
 
   const options = {
     method: req.method,
     headers: {
-      "apikey": SUPABASE_API_KEY,
-      "Authorization": `Bearer ${SUPABASE_API_KEY}`,
-      "Content-Type": "application/json"
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
     },
   };
 
-  if (req.method !== "GET" && req.body) {
+  if (req.method !== 'GET' && req.body) {
     options.body = JSON.stringify(req.body);
   }
 
@@ -22,6 +29,6 @@ export default async function handler(req, res) {
     const data = await response.json();
     res.status(response.status).json(data);
   } catch (error) {
-    res.status(500).json({ error: "Proxy error", details: error.message });
+    res.status(500).json({ error: 'Proxy error', details: error.message });
   }
 }
